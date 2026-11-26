@@ -1,0 +1,33 @@
+:root{--navy:#12305a;--orange:#f08a1c;--bg:#f4f6fa;--ink:#16202e;--mute:#5b6778;--line:#d9dfe9}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:14px 16px}
+header h1{margin:0;font-size:20px}
+header p{margin:2px 0 0;font-size:13px;opacity:.8}
+main{max-width:900px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
+select{width:100%;font:inherit;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+button,.btn{display:inline-block;font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--orange);color:#1b1000;cursor:pointer;text-decoration:none;margin-top:12px}
+button.alt,.btn.alt{background:var(--navy);color:#fff}
+.row{display:grid;gap:10px}
+@media(min-width:640px){.row{grid-template-columns:1fr 1fr}}
+#map{width:100%;height:auto;background:#eaf1ea;border-radius:10px}
+.edge{stroke:#b7c2b7;stroke-width:3;stroke-linecap:round}
+.route{stroke:var(--orange);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.node{fill:var(--navy)}.node.on{fill:var(--orange)}
+.lbl{font-size:11px;fill:var(--ink);text-anchor:middle}
+ol{padding-left:22px}li{margin:6px 0}
+.sum{font-weight:700;font-size:18px}
+.muted{color:var(--mute);font-size:14px}
+/* AR page */
+body.ar{background:#000;color:#fff;overflow:hidden}
+#cam{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
+#hud{position:fixed;left:0;right:0;top:0;padding:12px;background:linear-gradient(#000c,#0000);z-index:2}
+#hud select{background:#fffe}
+#arrowWrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;pointer-events:none}
+#arrow{width:170px;height:170px;transition:transform .15s linear;filter:drop-shadow(0 4px 10px #000a)}
+#info{margin-top:10px;text-align:center;text-shadow:0 2px 6px #000}
+#info b{font-size:34px;display:block}
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:14px;text-align:center;z-index:2;background:linear-gradient(#0000,#000c)}
+#status{font-size:14px;opacity:.9;margin:0 0 6px}
