@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Faculty · AJIET</title><link rel="stylesheet" href="style.css"></head><body>
+<header><h1>Faculty</h1><p>A J Institute of Engineering and Technology, Mangaluru</p></header>
+<nav><a href="index.html">Home</a><a href="attendance.html">Attendance</a><a href="faculty.html">Faculty</a><a href="campus.html">Campus</a></nav>
+<main><section class="card"><h2>AI &amp; ML department</h2><input id="q" placeholder="Search by name" aria-label="Search faculty"><div id="list"></div></section><section class="card"><h2>Other departments (official faculty lists)</h2><div id="depts" class="links"></div></section></main><script src="data.js"></script><script>
+const show=()=>{list.innerHTML=FACULTY.filter(f=>f[0].toLowerCase().includes(q.value.toLowerCase())).map(([n,r,id,p])=>`<a class="person" href="${U}faculty-details.php?url=${id}">${p?`<img src="${p}" alt="">`:`<span>${n.replace(/^(Dr|Mrs|Mr|Ms)\.\s*/,"")[0]}</span>`}<div><b>${n}</b><br><small>${r}</small></div></a>`).join("")||"<p>No name matches. Check the spelling.</p>"};
+q.oninput=show;show();
+depts.innerHTML=Object.entries(DEPTS).map(([n,s])=>`<a href="${U}department-${s}.php">${n}</a>`).join("");</script></body></html>
