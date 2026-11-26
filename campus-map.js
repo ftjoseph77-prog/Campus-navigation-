@@ -1,24 +1,37 @@
-// CAMPUS DATA - TEST VERSION with real GPS coordinates.
-// Each place now uses lat / lon directly. x,y (metres from the Main Gate) are calculated automatically.
-// To change a place later, just edit its lat / lon below.
+// CAMPUS DATA
+// Places with lat/lon = REAL GPS positions (Library, ECE, AIML).
+// Places with x,y     = SAMPLE positions (metres EAST / NORTH of the origin). Replace them with lat/lon later.
+// To make a place real: delete its x,y and write lat and lon instead.
 const CAMPUS = {
   name: "AJIET Campus Navigator",
-  // Main Gate position. PLACEHOLDER: replace with the real Main Gate lat/lon.
-  origin: { lat: 12.30250, lon: 75.25940 },
+  // Origin = estimated Main Gate position (PLACEHOLDER). Sample x,y are measured from here.
+  origin: { lat: 12.301983, lon: 75.258670 },
   places: [
-    { id: "gate", name: "Main Gate", lat: 12.30250, lon: 75.25940 },      // PLACEHOLDER
-    { id: "lib", name: "Library", lat: 12.302702, lon: 75.259497 },
-    { id: "ece", name: "ECE Department", lat: 12.302648, lon: 75.259469 },
-    { id: "aiml", name: "AIML Department", lat: 12.30269, lon: 75.259491 }
+    { id: "gate", name: "Main Gate", x: 0, y: 0 },                  // SAMPLE
+    { id: "parking", name: "Parking", x: -50, y: 20 },              // SAMPLE
+    { id: "canteen", name: "Canteen", x: 100, y: 20 },              // SAMPLE
+    { id: "admin", name: "Admin Block", x: 40, y: 60 },             // SAMPLE
+    { id: "aud", name: "Auditorium", x: -40, y: 90 },               // SAMPLE
+    { id: "lib", name: "Library", lat: 12.302702, lon: 75.259497 },   // REAL
+    { id: "cse", name: "CSE Department", x: 140, y: 60 },           // SAMPLE
+    { id: "ece", name: "ECE Department", lat: 12.302648, lon: 75.259469 },   // REAL
+    { id: "aiml", name: "AIML Department", lat: 12.30269, lon: 75.259491 },  // REAL
+    { id: "mech", name: "Mechanical Department", x: 60, y: 140 },   // SAMPLE
+    { id: "civil", name: "Civil Department", x: 200, y: 100 },      // SAMPLE
+    { id: "ground", name: "Sports Ground", x: 210, y: 10 },         // SAMPLE
+    { id: "hostel", name: "Hostel", x: 230, y: 170 }                // SAMPLE
   ],
   // Walkable paths between places
   edges: [
-    ["gate", "lib"], ["gate", "ece"], ["gate", "aiml"],
-    ["lib", "ece"], ["lib", "aiml"], ["ece", "aiml"]
+    ["gate", "parking"], ["gate", "admin"], ["gate", "canteen"], ["admin", "aud"],
+    ["admin", "lib"], ["admin", "mech"], ["lib", "cse"], ["canteen", "cse"],
+    ["cse", "ece"], ["cse", "civil"], ["ece", "mech"], ["ece", "hostel"],
+    ["civil", "ground"], ["civil", "hostel"], ["canteen", "ground"],
+    ["lib", "aiml"], ["aiml", "ece"]
   ]
 };
 
-// Convert each place's lat/lon into x (east) and y (north) metres from the origin.
+// Convert real lat/lon places into x,y metres from the origin.
 CAMPUS.places.forEach(p => {
   if (p.lat !== undefined) {
     p.y = (p.lat - CAMPUS.origin.lat) * 111320;
