@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101827">
+  <title>AR Campus Navigation</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css">
+  <style>
+    :root { color-scheme: dark; --panel: rgba(12, 20, 34, .88); --accent: #42e6a4; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #101827; color: #f8fafc;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif; }
+    header { padding: 18px 20px 12px; display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    header h1 { margin:0; font-size:1.15rem; }
+    header small { color:#aab8cc; }
+    main { width:min(100%, 760px); margin:auto; padding: 0 14px 28px; }
+    .camera-box { position:relative; overflow:hidden; width:100%; aspect-ratio: 3/4;
+      max-height: min(68vh, 680px); background:#050a12; border-radius:20px; border:1px solid #334155; }
+    #camera { display:none; width:100%; height:100%; object-fit:cover; }
+    .camera-placeholder { position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+      padding:28px; color:#b7c5d8; background:radial-gradient(circle at center,#1e3149,#07101d 70%); }
+    .camera-placeholder .big { font-size:3rem; color:var(--accent); margin-bottom:12px; }
+    .hud { position:absolute; inset:0; pointer-events:none; display:none; }
+    .top-hud { position:absolute; top:14px; left:14px; right:14px; display:flex; justify-content:space-between; gap:8px; }
+    .chip { background:var(--panel); border:1px solid #ffffff24; border-radius:999px; padding:8px 12px; font-size:.82rem; backdrop-filter:blur(8px); }
+    .arrow-wrap { position:absolute; left:50%; top:48%; transform:translate(-50%,-50%);
+      width:132px; height:132px; display:grid; place-items:center; }
+    #directionArrow { font-size:6rem; color:var(--accent); text-shadow:0 4px 18px #000c; transform:rotate(0deg); }
+    .bottom-hud { position:absolute; left:14px; right:14px; bottom:14px; text-align:center;
+      background:var(--panel); border:1px solid #ffffff24; border-radius:16px; padding:12px; backdrop-filter:blur(8px); }
+    #targetName { font-size:1.08rem; font-weight:750; }
+    #instruction { color:#d5e2f2; font-size:.9rem; margin-top:4px; }
+    .panel { margin-top:14px; background:#1b293d; border:1px solid #334155; border-radius:16px; padding:16px; }
+    label { display:block; font-size:.88rem; color:#c4d2e5; margin-bottom:7px; }
+    select, button { font:inherit; border-radius:11px; padding:12px 14px; }
+    select { width:100%; background:#0d1727; color:white; border:1px solid #52627a; }
+    .buttons { display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; }
+    button { border:0; cursor:pointer; font-weight:700; flex:1; min-width:130px; }
+    button.primary { background:var(--accent); color:#062116; }
+    button.secondary { background:#34445c; color:white; }
+    button.danger { background:#a93232; color:white; }
+    button:disabled { opacity:.45; cursor:not-allowed; }
+    .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+    .stat { background:#0d1727; border-radius:12px; padding:10px; text-align:center; }
+    .stat strong { display:block; font-size:1.02rem; }
+    .stat span { display:block; color:#9fb0c7; font-size:.76rem; margin-top:3px; }
+    #status { color:#c4d2e5; line-height:1.5; min-height:24px; margin:12px 0 0; font-size:.9rem; }
+    .hint { color:#9fb0c7; font-size:.82rem; line-height:1.5; }
+    details { margin-top:12px; color:#c4d2e5; }
+    summary { cursor:pointer; font-weight:650; }
+    @media (min-width:650px) { .camera-box { aspect-ratio:16/10; max-height:520px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div><h1>AR Campus Navigation</h1><small>Camera + GPS + compass guidance</small></div>
+    <span aria-hidden="true">🧭</span>
+  </header>
+
+  <main>
+    <section class="camera-box" aria-label="AR camera view">
+      <video id="camera" autoplay playsinline muted></video>
+      <div class="camera-placeholder" id="cameraPlaceholder">
+        <div><div class="big">⌖</div><strong>AR camera is stopped</strong><p>Choose a destination, then start navigation.</p></div>
+      </div>
+      <div class="hud" id="hud">
+        <div class="top-hud">
+          <span class="chip" id="gpsChip">GPS: waiting</span>
+          <span class="chip" id="compassChip">Compass: waiting</span>
+        </div>
+        <div class="arrow-wrap"><span id="directionArrow" aria-label="Direction arrow">➤</span></div>
+        <div class="bottom-hud">
+          <div id="targetName">Destination</div>
+          <div id="instruction">Waiting for location and compass…</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <label for="destination">Choose campus destination</label>
+      <select id="destination"></select>
+      <div class="buttons">
+        <button class="primary" id="startButton">Start AR Navigation</button>
+        <button class="danger" id="stopButton" disabled>Stop</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="distance">—</strong><span>Distance</span></div>
+        <div class="stat"><strong id="bearing">—</strong><span>Direction</span></div>
+        <div class="stat"><strong id="accuracy">—</strong><span>GPS accuracy</span></div>
+      </div>
+      <p id="status" role="status">Select a destination to begin.</p>
+    </section>
+
+    <section class="panel">
+      <strong>Before using this project</strong>
+      <p class="hint">This page needs HTTPS (GitHub Pages is HTTPS), camera permission, location permission and device orientation support. Enter your real campus coordinates and route waypoints in <code>campus-map.js</code> before testing.</p>
+      <details>
+        <summary>Important accuracy note</summary>
+        <p class="hint">This starter uses GPS, compass heading and a camera overlay to show a directional arrow. It is not visual-inertial AR and does not recognize buildings or track exact indoor positions. GPS and compass can be inaccurate indoors. For precise indoor AR, add mapped visual markers or a dedicated AR framework.</p>
+      </details>
+    </section>
+  </main>
+
+  <script src="campus-map.js"></script>
+  <script src="ar-navigation.js"></script>
+</body>
+</html>
