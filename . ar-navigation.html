@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AR Campus Navigation</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101827;
+  color: white;
+}
+
+header {
+  padding: 18px;
+  text-align: center;
+  background: #172b45;
+}
+
+main {
+  max-width: 650px;
+  margin: auto;
+  padding: 15px;
+}
+
+h1 { font-size: 23px; }
+
+.camera {
+  position: relative;
+  height: 430px;
+  background: #050a12;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.overlay {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.arrow {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 85px;
+  color: #00ff9d;
+  text-shadow: 0 3px 15px black;
+}
+
+.info {
+  position: absolute;
+  bottom: 15px;
+  left: 10px;
+  right: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  background: #101827dd;
+  text-align: center;
+}
+
+.panel {
+  background: #1d2b40;
+  padding: 18px;
+  margin-top: 15px;
+  border-radius: 15px;
+}
+
+select, button {
+  width: 100%;
+  padding: 13px;
+  margin-top: 12px;
+  border: 0;
+  border-radius: 9px;
+  font-size: 16px;
+}
+
+select {
+  background: #fff;
+  color: #111;
+}
+
+button {
+  background: #00c982;
+  color: #061b13;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.stop {
+  background: #dc4444;
+  color: white;
+}
+
+#status {
+  color: #b9d7ff;
+  line-height: 1.5;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<h1>AR Campus Navigation</h1>
+<p>Smart Campus Direction System</p>
+</header>
+
+<main>
+
+<div class="camera">
+
+<video id="camera" autoplay playsinline muted></video>
+
+<div class="overlay" id="overlay">
+
+<div class="arrow" id="arrow">➤</div>
+
+<div class="info">
+<h3 id="destinationName">Destination</h3>
+<p id="distance">Distance: --</p>
+<p id="direction">Direction: --</p>
+</div>
+
+</div>
+</div>
+
+<div class="panel">
+
+<h3>Select Destination</h3>
+
+<select id="destination">
+</select>
+
+<button id="startButton">
+Start AR Navigation
+</button>
+
+<button class="stop" id="stopButton">
+Stop Navigation
+</button>
+
+<p id="status">Select a destination to begin.</p>
+
+</div>
+
+</main>
+
+<script src="campus-map.js"></script>
+<script src="ar-navigation.js"></script>
+
+</body>
+</html>
