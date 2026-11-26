@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AJIET Campus Navigator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>AJIET Campus Navigator</h1>
+  <p>A J Institute of Engineering and Technology, Mangaluru</p>
+</header>
+<main>
+  <section class="card">
+    <div class="row">
+      <div><label for="from">From</label><select id="from"></select></div>
+      <div><label for="to">To</label><select id="to"></select></div>
+    </div>
+    <button id="go" type="button">Find route</button>
+    <button id="swap" class="alt" type="button">Swap</button>
+  </section>
+  <section class="card"><svg id="map" role="img" aria-label="Campus map"></svg></section>
+  <section class="card" id="result" aria-live="polite"></section>
+  <p class="muted">Sample campus layout. Update campus-map.js with real measurements for accurate results.</p>
+</main>
+<script src="campus-map.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
