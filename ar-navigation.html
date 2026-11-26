@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AR Navigation · AJIET Campus Navigator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="ar">
+<video id="cam" playsinline muted autoplay></video>
+<div id="hud">
+  <label for="dest" style="margin:0 0 4px">Go to</label>
+  <select id="dest"></select>
+</div>
+<div id="arrowWrap">
+  <svg id="arrow" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 6 L88 86 L50 68 L12 86 Z" fill="#f08a1c" stroke="#fff" stroke-width="4" stroke-linejoin="round"/>
+  </svg>
+  <div id="info"><b id="dist">--</b><span id="next">Press Start</span></div>
+</div>
+<div id="bottom">
+  <p id="status">Allow camera, location and motion access when asked.</p>
+  <button id="start">Start AR</button>
+  <a class="btn alt" href="index.html">Back to map</a>
+</div>
+<script src="campus-map.js"></script>
+<script src="ar-navigation.js"></script>
+</body>
+</html>
