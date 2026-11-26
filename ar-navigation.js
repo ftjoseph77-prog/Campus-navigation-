@@ -11,7 +11,7 @@ function update() {
   const t = CAMPUS.ll(CAMPUS.byId[dest.value]);
   const dTarget = CAMPUS.hav(pos.lat, pos.lon, t.lat, t.lon);
   $("dist").textContent = dTarget > 1000 ? (dTarget / 1000).toFixed(1) + " km" : Math.round(dTarget) + " m";
-  if (dTarget < 15) { $("next").textContent = "You have arrived!"; return; }
+  if (dTarget < 4) { $("next").textContent = "You have arrived!"; return; }
   // Aim at the next stop on the walking route; go to the nearest path point first if far from it.
   const near = CAMPUS.nearest(pos.lat, pos.lon);
   let aim = t, label = CAMPUS.byId[dest.value].name;
@@ -20,6 +20,7 @@ function update() {
   else if (r && r.ids.length > 1) { const n = CAMPUS.byId[r.ids[1]]; aim = CAMPUS.ll(n); label = n.name; }
   $("next").textContent = "Head towards " + label;
   const b = CAMPUS.bearing(pos.lat, pos.lon, aim.lat, aim.lon);
+  if (heading == null) $("status").textContent = "Compass not working. Move the phone in a figure-8 and allow Motion access.";
   if (heading != null) $("arrow").style.transform = `rotate(${(b - heading + 360) % 360}deg)`;
   if (dTarget > 3000) $("status").textContent = "You are far from the campus, so the arrow is only a demo.";
 }
