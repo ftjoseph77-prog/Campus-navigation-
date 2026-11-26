@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Students attendance · AJIET</title><link rel="stylesheet" href="style.css"></head><body>
+<header><h1>Students attendance</h1><p>A J Institute of Engineering and Technology, Mangaluru</p></header>
+<nav><a href="index.html">Home</a><a href="attendance.html">Attendance</a><a href="faculty.html">Faculty</a><a href="campus.html">Campus</a></nav>
+<main><p class="muted">Demo: records are saved only in this browser. There is no login yet.</p>
+<section class="card"><h2>Mark attendance (faculty)</h2><label for="date">Date</label><input type="date" id="date"><label for="sub">Subject</label><select id="sub"></select><div id="roll"></div><button id="save">Save attendance</button><p id="msg" role="status"></p></section>
+<section class="card"><h2>View my attendance (student)</h2><label for="usn">USN</label><select id="usn"></select><div id="mine"></div></section></main><script src="data.js"></script><script src="attendance.js"></script></body></html>
