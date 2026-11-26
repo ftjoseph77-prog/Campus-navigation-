@@ -3,6 +3,8 @@
 <title>Students attendance · AJIET</title><link rel="stylesheet" href="style.css"></head><body>
 <header><h1>Students attendance</h1><p>A J Institute of Engineering and Technology, Mangaluru</p></header>
 <nav><a href="index.html">Home</a><a href="attendance.html">Attendance</a><a href="faculty.html">Faculty</a><a href="campus.html">Campus</a></nav>
+<style>.low{color:#c0392b;font-weight:700}.warn{background:#fdecea;color:#8a1f12;border-radius:8px;padding:8px 10px}.scroll{overflow-x:auto}table{border-collapse:collapse;width:100%}th,td{padding:6px 8px;border-bottom:1px solid #d9dfe9;text-align:left;white-space:nowrap}</style>
 <main><p class="muted">Demo: records are saved only in this browser. There is no login yet.</p>
-<section class="card"><h2>Mark attendance (faculty)</h2><label for="date">Date</label><input type="date" id="date"><label for="sub">Subject</label><select id="sub"></select><div id="roll"></div><button id="save">Save attendance</button><p id="msg" role="status"></p></section>
-<section class="card"><h2>View my attendance (student)</h2><label for="usn">USN</label><select id="usn"></select><div id="mine"></div></section></main><script src="data.js"></script><script src="attendance.js"></script></body></html>
+<section class="card"><h2>Mark attendance (faculty)</h2><label for="date">Date</label><input type="date" id="date"><label for="sub">Subject</label><select id="sub"></select><div id="roll"></div><button id="allp" class="alt" type="button">Mark all present</button> <button id="save">Save attendance</button><p id="msg" role="status"></p></section>
+<section class="card"><h2>View my attendance (student)</h2><label for="usn">USN</label><select id="usn"></select><div id="mine"></div></section>
+<section class="card"><h2>Class summary</h2><p class="muted">Attendance % of every student, by subject. Below 75% is shown in red.</p><div class="scroll" id="all"></div></section></main><script src="data.js"></script><script src="attendance.js"></script></body></html>
