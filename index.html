@@ -1,17 +1,54 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AJIET Campus Navigator</title>
-<link rel="stylesheet" href="style.css">
-</head>
-<body>
-<header>
-  <h1>AJIET Campus Navigator</h1>
-  <p>A J Institute of Engineering and Technology, Mangaluru</p>
-</header>
-<main>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AJIET Campus Navigator</title><style>:root{--navy:#12305a;--orange:#f08a1c;--bg:#f4f6fa;--ink:#16202e;--mute:#5b6778;--line:#d9dfe9}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header{background:var(--navy);color:#fff;padding:14px 16px}
+header h1{margin:0;font-size:20px}
+header p{margin:2px 0 0;font-size:13px;opacity:.8}
+main{max-width:900px;margin:0 auto;padding:16px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+label{display:block;font-weight:600;font-size:14px;margin:10px 0 4px}
+select{width:100%;font:inherit;padding:10px;border:1.5px solid var(--line);border-radius:8px;background:#fff}
+button,.btn{display:inline-block;font:inherit;font-weight:700;border:0;border-radius:10px;padding:12px 16px;background:var(--orange);color:#1b1000;cursor:pointer;text-decoration:none;margin-top:12px}
+button.alt,.btn.alt{background:var(--navy);color:#fff}
+.row{display:grid;gap:10px}
+@media(min-width:640px){.row{grid-template-columns:1fr 1fr}}
+#map{width:100%;height:auto;background:#eaf1ea;border-radius:10px}
+.edge{stroke:#b7c2b7;stroke-width:3;stroke-linecap:round}
+.route{stroke:var(--orange);stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.node{fill:var(--navy)}.node.on{fill:var(--orange)}
+.lbl{font-size:11px;fill:var(--ink);text-anchor:middle}
+ol{padding-left:22px}li{margin:6px 0}
+.sum{font-weight:700;font-size:18px}
+.muted{color:var(--mute);font-size:14px}
+/* AR page */
+body.ar{background:#000;color:#fff;overflow:hidden}
+#cam{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;background:#111}
+#hud{position:fixed;left:0;right:0;top:0;padding:12px;background:linear-gradient(#000c,#0000);z-index:2}
+#hud select{background:#fffe}
+#arrowWrap{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:1;pointer-events:none}
+#arrow{width:170px;height:170px;transition:transform .15s linear;filter:drop-shadow(0 4px 10px #000a)}
+#info{margin-top:10px;text-align:center;text-shadow:0 2px 6px #000}
+#info b{font-size:34px;display:block}
+#bottom{position:fixed;left:0;right:0;bottom:0;padding:14px;text-align:center;z-index:2;background:linear-gradient(#0000,#000c)}
+#status{font-size:14px;opacity:.9;margin:0 0 6px}
+nav{display:flex;background:#fff;border-bottom:1px solid var(--line)}
+nav a{flex:1;text-align:center;padding:12px 4px;color:var(--navy);font-weight:700;font-size:14px;text-decoration:none}
+h2{font-size:17px;margin:0 0 8px}
+input{width:100%;font:inherit;padding:10px;border:1.5px solid var(--line);border-radius:8px}
+.person{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);color:inherit;text-decoration:none}
+.person img,.person>span{width:52px;height:52px;border-radius:50%;object-fit:cover;background:var(--navy);color:#fff;display:grid;place-items:center;flex:none}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.links a{padding:12px;border:1.5px solid var(--line);border-radius:8px;color:var(--navy);font-weight:600;text-decoration:none}
+.st{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.st select{width:150px}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:6px 4px;border-bottom:1px solid var(--line)}
+.P{color:#14733b}.A{color:#b3261e}
+
+nav{position:sticky;top:0;z-index:5}nav a.cur{border-bottom:3px solid var(--orange)}</style></head><body>
+<header><h1>AJIET Campus Navigator</h1><p>A J Institute of Engineering and Technology, Mangaluru</p></header>
+<nav><a href="#map">Route map</a><a href="#attendance">Attendance</a><a href="#faculty">Faculty</a><a href="#campus">Campus</a></nav><main><div class="tab" id="tab-map">
   <section class="card">
     <div class="row">
       <div><label for="from">From</label><select id="from"></select></div>
@@ -23,8 +60,69 @@
   <section class="card"><svg id="map" role="img" aria-label="Campus map"></svg></section>
   <section class="card" id="result" aria-live="polite"></section>
   <p class="muted">Sample campus layout. Update campus-map.js with real measurements for accurate results.</p>
-</main>
-<script src="campus-map.js"></script>
-<script src="script.js"></script>
-</body>
-</html>
+</div><div class="tab" id="tab-attendance"><p class="muted">Demo: records are saved only in this browser. There is no login yet.</p>
+<section class="card"><h2>Mark attendance (faculty)</h2><label for="date">Date</label><input type="date" id="date"><label for="sub">Subject</label><select id="sub"></select><div id="roll"></div><button id="save">Save attendance</button><p id="msg" role="status"></p></section>
+<section class="card"><h2>View my attendance (student)</h2><label for="usn">USN</label><select id="usn"></select><div id="mine"></div></section></div><div class="tab" id="tab-faculty"><section class="card"><h2>AI &amp; ML department</h2><input id="q" placeholder="Search by name" aria-label="Search faculty"><div id="list"></div></section><section class="card"><h2>Other departments (official faculty lists)</h2><div id="depts" class="links"></div></section></div><div class="tab" id="tab-campus"><section class="card"><h2>Academics</h2><div class="links"><a href="https://ajgroup.dhi-edu.com/ajgroup_ajiet">ERP login</a><a href="https://www.ajiet.edu.in/study-materials-aiml.php">AI&amp;ML study materials</a><a href="https://vtu.ac.in/b-e-scheme-syllabus/">VTU syllabus</a><a href="https://results.vtu.ac.in/">VTU results</a><a href="https://www.ajiet.edu.in/calendar-of-events.php">Calendar of events</a></div></section>
+<section class="card"><h2>Campus life</h2><div class="links"><a href="https://www.ajiet.edu.in/library-overview.php">Library</a><a href="https://www.ajiet.edu.in/transportation.php">Transport</a><a href="https://www.ajiet.edu.in/canteen-food.php">Canteen</a><a href="https://www.ajiet.edu.in/hostel-committee.php">Hostel</a><a href="https://www.ajiet.edu.in/student-clubs.php">Clubs</a><a href="https://www.ajiet.edu.in/sports.php">Sports</a></div></section>
+<section class="card"><h2>News and careers</h2><div class="links"><a href="https://www.ajiet.edu.in/news-all.php">News &amp; events</a><a href="https://www.ajiet.edu.in/placement.php">Placements</a></div></section>
+<section class="card"><h2>Help</h2><div class="links"><a href="https://www.ajiet.edu.in/anti-ragging-committee.php">Anti-ragging</a><a href="https://www.ajiet.edu.in/grievance-and-redressal-committee.php">Grievance</a><a href="https://www.ajiet.edu.in/women-welfare-committee.php">Women’s welfare</a><a href="tel:08242455048">Call college</a><a href="https://www.ajiet.edu.in/contact-us.php">Contact page</a></div></section></div></main>
+<script src="campus-map.js"></script><script src="script.js"></script>
+<script>// Faculty: AI & ML list from ajiet.edu.in (26 Nov 2026). photo: e.g. "photos/name.jpg"
+const U = "https://www.ajiet.edu.in/";
+const FACULTY = [
+["Dr. Chanchal Antony","Professor & HOD","303/dr-chanchal",U+"img/Hod/Dr.-Chanchal-Antony-aiml.jpg"],
+["Dr. Anil B V","Associate Professor","346/dr-anil-b"],
+["Dr. Vineetha Pais","Associate Professor","317/dr-vineetha-pais"],
+["Dr. Pradeep Udupa","Associate Professor","370/dr-pradeep-udupa"],
+["Mrs. Ramya P M","Assistant Professor","304/mrs-ramya-p"],
+["Mr. Sharad Shandhi Ravi","Assistant Professor","143/mr-sharad"],
+["Mrs. Nisha A Rai","Assistant Professor","299/mrs-nisha-a"],
+["Ms. Harshitha Amin","Assistant Professor","376/ms-harshitha-amin"],
+["Ms. Anusha C Bhatkal","Assistant Professor","430/ms-anusha-c"],
+["Mrs. Deeptha Hegde","Assistant Professor","438/mrs-deeptha-hegde"],
+["Mr. Amareesh Attavar","Assistant Professor","453/mr-amareesh-attavar"],
+["Mamatha D","Assistant Professor","475/mamatha-d"],
+["Mr. Jobin Jacob","Programmer","381/mr-jobin"],
+["Ms. Apoorva","Instructor","144/ms-apoorva"],
+["Ms. Meghana","Instructor","320/ms-meghana"],
+["Ms. Suchithra","Lab instructor","354/ms-suchithra"],
+["Ms. Chaithra","Lab instructor","355/ms-chaithra"]];
+const DEPTS = {Civil:"civil",CSE:"cse","IoT & Cyber Security":"iot","AI & Data Science":"aids",ECE:"ece",VLSI:"vlsi",ISE:"ise",Mechanical:"mech","Basic Science":"basic-science",MBA:"mba",MCA:"mca"};
+// SAMPLE entries: replace with your class list and subjects
+const STUDENTS = [["SAMPLE001","Student One"],["SAMPLE002","Student Two"],["SAMPLE003","Student Three"]];
+const SUBJECTS = ["Subject 1","Subject 2","Subject 3"];
+</script><script>const KEY="ajiet-att";
+let db={};
+try{db=JSON.parse(localStorage.getItem(KEY))||{}}catch(e){}
+SUBJECTS.forEach(s=>sub.add(new Option(s)));
+STUDENTS.forEach(([u,n])=>usn.add(new Option(u+" - "+n,u)));
+date.value=date.max=new Date().toLocaleDateString("en-CA");
+function roll_(){
+  const r=db[date.value+"|"+sub.value]||{};
+  roll.innerHTML=STUDENTS.map(([u,n])=>`<div class="st"><span>${n}<br><small>${u}</small></span><select data-u="${u}" aria-label="${n}"><option value="">Not marked</option><option value="P"${r[u]=="P"?" selected":""}>Present</option><option value="A"${r[u]=="A"?" selected":""}>Absent</option></select></div>`).join("");
+  msg.textContent="";
+}
+function mine_(){
+  const rows=Object.keys(db).sort().reverse().map(k=>[...k.split("|"),db[k][usn.value]]).filter(x=>x[2]);
+  if(!rows.length){mine.innerHTML='<p class="muted">No attendance marked yet.</p>';return}
+  const p=rows.filter(x=>x[2]=="P").length;
+  mine.innerHTML=`<p class="sum">${Math.round(p/rows.length*100)}% (${p} of ${rows.length} classes)</p><table><tr><th>Date</th><th>Subject</th><th>Status</th></tr>${rows.map(([d,s,v])=>`<tr><td>${d}</td><td>${s}</td><td class="${v}">${v=="P"?"Present":"Absent"}</td></tr>`).join("")}</table>`;
+}
+save.onclick=()=>{
+  const all=[...roll.querySelectorAll("select")];
+  if(!date.value||all.some(s=>!s.value)){msg.textContent="Choose a date and mark every student.";return}
+  db[date.value+"|"+sub.value]=Object.fromEntries(all.map(s=>[s.dataset.u,s.value]));
+  try{localStorage.setItem(KEY,JSON.stringify(db));msg.textContent="Attendance saved."}catch(e){msg.textContent="Could not save. Turn off private browsing."}
+  mine_();
+};
+date.onchange=sub.onchange=roll_;usn.onchange=mine_;roll_();mine_();
+</script><script>
+const show=()=>{list.innerHTML=FACULTY.filter(f=>f[0].toLowerCase().includes(q.value.toLowerCase())).map(([n,r,id,p])=>`<a class="person" href="${U}faculty-details.php?url=${id}">${p?`<img src="${p}" alt="">`:`<span>${n.replace(/^(Dr|Mrs|Mr|Ms)\.\s*/,"")[0]}</span>`}<div><b>${n}</b><br><small>${r}</small></div></a>`).join("")||"<p>No name matches. Check the spelling.</p>"};
+q.oninput=show;show();
+depts.innerHTML=Object.entries(DEPTS).map(([n,s])=>`<a href="${U}department-${s}.php">${n}</a>`).join("");</script>
+<script>
+function tab(){const k=document.getElementById("tab-"+location.hash.slice(1))?location.hash.slice(1):"map";
+document.querySelectorAll(".tab").forEach(t=>t.hidden=t.id!=="tab-"+k);
+document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("cur",a.hash==="#"+k));scrollTo(0,0)}
+onhashchange=tab;tab();
+</script></body></html>
